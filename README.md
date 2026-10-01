@@ -40,6 +40,12 @@ wget -qO trycfd.sh https://raw.githubusercontent.com/milio48/trycfd/main/trycfd.
 
 - `ORIGIN_URL`: Override default origin (default: `http://localhost:<port>`).
 
+## How It Works
+
+- **Auto-provisioning**: If the specified credentials file does not exist, the script automatically provisions a new tunnel and saves the credentials into that JSON file.
+- **Persistent Subdomain**: Reusing the same JSON file keeps your assigned `*.trycloudflare.com` subdomain persistent across restarts.
+- **Portable**: You can copy this JSON file to another machine or server to host the exact same subdomain there.
+
 ## Disclaimer
 
 This project is an unofficial, independent tool created strictly for educational and research purposes. It is not affiliated with, sponsored by, or endorsed by Cloudflare, Inc.
