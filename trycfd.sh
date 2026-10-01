@@ -2,15 +2,31 @@
 set -euo pipefail
 
 # Usage:
-#   ./trycfd.sh [creds.json] [port] [path-to-cloudflared]
+#   ./trycfd.sh <creds.json> [port] [path-to-cloudflared]
 #
 # Examples:
-#   ./trycfd.sh                          # creds.json, port 8080, cloudflared from PATH
 #   ./trycfd.sh one.json                 # one.json, port 8080, cloudflared from PATH
 #   ./trycfd.sh one.json 8043            # one.json, port 8043
 #   ./trycfd.sh one.json 8043 /tmp/cloudflared
 
-CREDS_FILE="${1:-creds.json}"
+show_help() {
+    cat <<EOF
+Usage:
+  ./trycfd.sh <creds.json> [port] [path-to-cloudflared]
+
+Examples:
+  ./trycfd.sh one.json                 # one.json, port 8080, cloudflared from PATH
+  ./trycfd.sh one.json 8043            # one.json, port 8043
+  ./trycfd.sh one.json 8043 /tmp/cloudflared
+EOF
+}
+
+if [ $# -eq 0 ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
+    show_help
+    exit 0
+fi
+
+CREDS_FILE="$1"
 PORT="${2:-8080}"
 CLOUDFLARED_BIN="${3:-cloudflared}"
 
@@ -20,6 +36,7 @@ API="https://api.trycloudflare.com/tunnel"
 # Basic port validation
 if ! [[ "$PORT" =~ ^[0-9]+$ ]] || [ "$PORT" -lt 1 ] || [ "$PORT" -gt 65535 ]; then
     echo "[!] invalid port: $PORT" >&2
+    show_help >&2
     exit 1
 fi
 
